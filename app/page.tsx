@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRequisition } from "./context/RequisitionCOntext";
-import type { Status, Requisition } from "./context/RequisitionCOntext";
+import { useRequisition } from "./context/RequisitionContext";
+import type { Status, Requisition } from "./context/RequisitionContext";
 export default function Home() {
   const { requests, setRequests } = useRequisition();
 

@@ -1,5 +1,5 @@
-import type { Requisition } from "../context/RequisitionCOntext";
-import type { Status } from "../context/RequisitionCOntext";
+import type { Requisition } from "../context/RequisitionContext";
+import type { Status } from "../context/RequisitionContext";
 
 import StatusBadge from "./statusbadge";
 type Props = {
