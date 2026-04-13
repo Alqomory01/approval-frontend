@@ -1,50 +1,61 @@
 "use client";
 
 import Card from "../components/card";
+import { useRequisition } from "../context/RequisitionCOntext";
+import {Requisition} from "../context/RequisitionCOntext"
+import {Status} from "../context/RequisitionCOntext"
 
-const data = [
-  {
-    id: 1,
-    title: "Laptop Purchase",
-    amount: 500000,
-    status: "PENDING_HOD",
-  },
-];
+export default function AuditPage() {
+  const { requests, setRequests } = useRequisition();
 
-export default function AccountPage() {
+  const hodRequests = requests.filter(
+    (item) => item.status === "PENDING_HOD"
+  );
+const handleApprove = (id: number) => {
+  const updated = requests.map((item): Requisition =>
+    item.id === id
+      ? { ...item, status: "PENDING_AUDIT" as Status }
+      : item
+  );
+
+  setRequests(updated);
+};
+
+  const handleReject = (id: number) => {
+  const updated = requests.map((item): Requisition =>
+    item.id === id
+      ? { ...item, status: "REJECTED" as Status }
+      : item
+  );
+
+  setRequests(updated);
+};
+
   return (
-    <div className="min-h-screen bg-gray-100 px-4 sm:px-6 py-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        
-        {/* Header */}
-        <h1 className="text-xl sm:text-2xl font-bold">
-         Audit verifications
-        </h1>
+    <div className="p-6 space-y-4">
+      <h1 className="text-xl font-bold">Audit Verifications</h1>
 
-        {/* List */}
-        {data.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white p-4 sm:p-5 rounded-xl shadow space-y-4"
-          >
-            {/* Card */}
-            <Card data={item} />
+      {hodRequests.map((item) => (
+        <div key={item.id} className="space-y-2">
+          <Card data={item} status={item.status} />
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              
-              <button className="w-full sm:w-auto bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-md">
-                verify
-              </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleApprove(item.id)}
+              className="bg-green-600 text-white px-3 py-1 rounded"
+            >
+              Approve
+            </button>
 
-              <button className="w-full sm:w-auto bg-red-600 hover:bg-red-700 transition text-white px-4 py-2 rounded-md">
-                reject
-              </button>
-
-            </div>
+            <button
+              onClick={() => handleReject(item.id)}
+              className="bg-red-600 text-white px-3 py-1 rounded"
+            >
+              Reject
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

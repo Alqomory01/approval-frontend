@@ -1,17 +1,33 @@
 "use client";
 
 import { useState } from "react";
-
+import { useRequisition } from "./context/RequisitionCOntext";
+import type { Status, Requisition } from "./context/RequisitionCOntext";
 export default function Home() {
+  const { requests, setRequests } = useRequisition();
+
   const [form, setForm] = useState({
     title: "",
     amount: "",
   });
 
   const handleSubmit = () => {
-    console.log(form);
+   const newRequest: Requisition = {
+  id: Date.now(),
+  title: form.title,
+  amount: Number(form.amount),
+  staffName: "Kanyinsola Olaotu",
+  department: "HSE",
+  function: "Operation",
+  jobTitle: "Officer",
+  jobLevel: "Officer",
+  status: "PENDING_HOD" as Status,
+    };
+    setRequests([...requests, newRequest]);
+
     alert("Request submitted!");
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">

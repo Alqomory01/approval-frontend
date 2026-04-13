@@ -1,30 +1,56 @@
 "use client";
 
 import Card from "../components/card";
-
-const data = [
-  {
-    id: 1,
-    title: "Laptop Purchase",
-    amount: 500000,
-    status: "PENDING_HOD",
-  },
-];
+import { useRequisition } from "../context/RequisitionCOntext";
+import {Requisition} from "../context/RequisitionCOntext"
+import {Status} from "../context/RequisitionCOntext"
 
 export default function HodPage() {
+  const { requests, setRequests } = useRequisition();
+
+  const hodRequests = requests.filter(
+    (item) => item.status === "PENDING_HOD"
+  );
+const handleApprove = (id: number) => {
+  const updated = requests.map((item): Requisition =>
+    item.id === id
+      ? { ...item, status: "PENDING_AUDIT" as Status }
+      : item
+  );
+
+  setRequests(updated);
+};
+
+  const handleReject = (id: number) => {
+  const updated = requests.map((item): Requisition =>
+    item.id === id
+      ? { ...item, status: "REJECTED" as Status }
+      : item
+  );
+
+  setRequests(updated);
+};
+
   return (
     <div className="p-6 space-y-4">
       <h1 className="text-xl font-bold">HOD Approvals</h1>
 
-      {data.map((item) => (
+      {hodRequests.map((item) => (
         <div key={item.id} className="space-y-2">
-          <Card data={item} />
+          <Card data={item} status={item.status} />
 
           <div className="flex gap-2">
-            <button className="bg-green-600 text-white px-3 py-1 rounded">
+            <button
+              onClick={() => handleApprove(item.id)}
+              className="bg-green-600 text-white px-3 py-1 rounded"
+            >
               Approve
             </button>
-            <button className="bg-red-600 text-white px-3 py-1 rounded">
+
+            <button
+              onClick={() => handleReject(item.id)}
+              className="bg-red-600 text-white px-3 py-1 rounded"
+            >
               Reject
             </button>
           </div>
