@@ -9,12 +9,12 @@ export default function AuditPage() {
   const { requests, setRequests } = useRequisition();
 
   const hodRequests = requests.filter(
-    (item) => item.status === "PENDING_HOD"
+    (item) => item.status === "PENDING_AUDIT"
   );
 const handleApprove = (id: number) => {
   const updated = requests.map((item): Requisition =>
     item.id === id
-      ? { ...item, status: "PENDING_AUDIT" as Status }
+      ? { ...item, status: "PENDING_FINAL" as Status }
       : item
   );
 
